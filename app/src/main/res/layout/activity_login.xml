@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#52CD6B6B"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/textview_logintitle"
+        android:layout_width="298dp"
+        android:layout_height="122dp"
+        android:text="- משתמש קיים     התחבר"
+        android:textColor="#000000"
+        android:textIsSelectable="false"
+        android:textSize="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.119" />
+
+    <EditText
+        android:id="@+id/edittext_loginemail"
+        style="@android:style/Widget.Material.Light.AutoCompleteTextView"
+        android:layout_width="275dp"
+        android:layout_height="73dp"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:hint="דואר אלקטרוני"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.431" />
+
+    <EditText
+        android:id="@+id/edittext_logingpassword"
+        style="@android:style/Widget.Material.Light.AutoCompleteTextView"
+        android:layout_width="275dp"
+        android:layout_height="80dp"
+        android:background="#F1F1F1"
+        android:ems="10"
+        android:hint="סיסמא"
+        android:inputType="textPassword"
+        android:shadowColor="#100808"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.629" />
+
+    <Button
+        android:id="@+id/btn_loginconfirm"
+        android:layout_width="227dp"
+        android:layout_height="97dp"
+        android:background="#040101"
+        android:text="אישור"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.888" />
+</androidx.constraintlayout.widget.ConstraintLayout>
