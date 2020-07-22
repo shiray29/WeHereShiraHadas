@@ -23,9 +23,6 @@ public class WaitforRequest extends AppCompatActivity implements View.OnClickLis
     private TextView textViewWaitforReq;
     private Button btnEditWait;
     private Profile profile;
-    public WaitforRequest(Button reqChange) {
-        reqChange= findViewById(R.id.btn_reqchange);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
