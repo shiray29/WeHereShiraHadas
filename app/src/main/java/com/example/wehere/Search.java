@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class Search extends AppCompatActivity implements OnMapReadyCallback {
 
     private DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
     private ArrayList profileList;
     private ArrayList markerList;
     private GoogleMap googleMap;
@@ -43,9 +44,10 @@ public class Search extends AppCompatActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        databaseReference= FirebaseDatabase.getInstance().getReference("users");
+        firebaseAuth = FirebaseAuth.getInstance();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
-        databaseReference= FirebaseDatabase.getInstance().getReference("users");
         final ArrayList<Profile> profileList = new ArrayList<Profile>();
         final ArrayList<Marker> markerList = new ArrayList<Marker>();
         btnSearchedit = findViewById(R.id.btn_searchedit);
@@ -67,7 +69,7 @@ public class Search extends AppCompatActivity implements OnMapReadyCallback {
         double tempLat; // temporary variables for users loaction
         double tempLon;
 
-        DatabaseReference  ref = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance()
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance()
                 .getCurrentUser().getUid()); // gets current user Lat & Lon
         ref.addValueEventListener(new ValueEventListener() {
             @Override

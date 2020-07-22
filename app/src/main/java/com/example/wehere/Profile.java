@@ -1,7 +1,7 @@
 package com.example.wehere;
 
 public class Profile {
-    private String name, adress, id, cellnum, password, email, uriId, uriProfile;
+    private String name, adress, id, cellnum, password, email, uriId;
     private boolean isOld, isBuild, isClean, isCompany, isShop, isCall;
     private double longitude, latitude;
 
@@ -18,7 +18,6 @@ public class Profile {
         this.password = "";
         this.email = "";
         this.uriId = "";
-        this.uriProfile = "";
         this.isOld = false;
         this.isBuild = false;
         this.isClean = false;
@@ -31,8 +30,8 @@ public class Profile {
     }
 
 
-    public Profile(String name, String adress, String id, String cellnum, String email, String passsword,
-                   String uri, boolean isOld, boolean isBuild, boolean isClean, boolean isCompany, boolean isShop, boolean isCall, Double longitude, Double latitude) {
+    public Profile(String name, String adress, String id, String cellnum, String email, String password,
+                   String uriId, boolean isOld, boolean isBuild, boolean isClean, boolean isCompany, boolean isShop, boolean isCall, Double longitude, Double latitude) {
         this.name = name;
         this.adress = adress;
         this.id = id;
@@ -40,7 +39,6 @@ public class Profile {
         this.password = password;
         this.email = email;
         this.uriId = uriId;
-        this.uriProfile = uriProfile;
         this.isOld = isOld;
         this.isBuild = isBuild;
         this.isClean = isClean;
@@ -49,7 +47,6 @@ public class Profile {
         this.isCall = isCall;
         this.longitude = longitude;
         this.latitude = latitude;
-
     }
 
 
@@ -113,8 +110,8 @@ public class Profile {
         this.uriId = uriId;
     }
 
-    public void setUriProfile(String uriProfile) {
-        this.uriProfile = uriProfile;
+    public String getUriId(String uriId) {
+        return uriId;
     }
 
     public String getEmail() {

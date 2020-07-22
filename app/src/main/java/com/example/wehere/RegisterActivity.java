@@ -51,8 +51,7 @@ private DatabaseReference databaseReference;
 private FirebaseAuth firebaseAuth;
 private ProgressBar progressBar;
 private Uri imageUri;
-private TextView textViewProfile, textViewId;
-private  boolean flag;
+private TextView textViewId;
 private FusedLocationProviderClient fusedLocationProviderClient;
 private double longitude, latitude;
 private String fullname, cellnum, idnum, adress, email, password;
@@ -70,7 +69,6 @@ protected void onCreate(Bundle savedInstanceState) {
         }
         edittextFullname = findViewById(R.id.edittext_fullname);
         edittextCellnum = findViewById(R.id.edittext_cellnum);
-        textViewProfile = findViewById(R.id.textview_insertprofile);
         textViewId = findViewById(R.id.textview_insertidphoto);
         edittextIdnum = findViewById(R.id.edittext_idnum);
         edittextAdress = findViewById(R.id.edittext_adress);
@@ -80,7 +78,6 @@ protected void onCreate(Bundle savedInstanceState) {
         checkboxVolunteer = findViewById(R.id.checkbox_volunteer);
         btnConfirm = findViewById(R.id.btn_confirm);
         progressBar = findViewById(R.id.progress_bar);
-        textViewProfile.setOnClickListener(this);
         textViewId.setOnClickListener(this);
         btnConfirm.setOnClickListener(this);
         profile = new Profile();
@@ -138,13 +135,8 @@ private void upload(){
                                 }
                         },500);
                         progressBar.setProgress(0);
-                        if(flag){ // inserts the information to the suitable variable using the flag (flag is true if it's ID image)
                         profile.setUriId(uri.toString());
                         }
-                else {
-                profile.setUriProfile(uri.toString());
-                }
-        }
         });
         }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() { // להעלות את זה לתוך האון סקסס
@@ -154,6 +146,7 @@ private void upload(){
                 progressBar.setProgress((int )progress);
                 }
                 });
+
                 }
         }
 private String getFileExtention(Uri uri){
@@ -166,13 +159,7 @@ private String getFileExtention(Uri uri){
 @Override
 public void onClick(View v) {
 
-        if (textViewProfile==v) {
-        flag= false;
-        openFile();
-        upload();
-        }
         if (textViewId==v){
-        flag=true;
         openFile();
         upload();
         }
@@ -218,8 +205,7 @@ public void onClick(View v) {
         profile.setOld(false);
         }
 
-
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task)
         {

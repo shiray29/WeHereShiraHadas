@@ -24,7 +24,7 @@ public class ChooseiconsActivity extends AppCompatActivity {
     private TextView textViewPick, textViewBuild, textViewCall, textViewClean, textViewCompany, textViewShop;
     private Button btnconfirmicon;
     private Profile profile;
-    int buildCount, companyCount, cleanCount, callCount, shopCount;
+    private int buildCount, companyCount, cleanCount, callCount, shopCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +42,17 @@ public class ChooseiconsActivity extends AppCompatActivity {
         textViewShop = findViewById(R.id.textView_shop);
         textViewPick = findViewById(R.id.textView_pick);
         btnconfirmicon = findViewById(R.id.btn_confirmicon);
+        profile = new Profile();
         buildCount = 0; // defining count variables for each help type
         callCount = 0;
         cleanCount = 0;
         companyCount = 0;
         shopCount = 0;
+        imageViewBuild.setClickable(true);
+        imageViewCall.setClickable(true);
+        imageViewClean.setClickable(true);
+        imageViewCompany.setClickable(true);
+        imageViewShop.setClickable(true);
         imageViewBuild.setBackground(null); // cancels previous highlights
         imageViewCall.setBackground(null);
         imageViewClean.setBackground(null);
@@ -55,7 +61,6 @@ public class ChooseiconsActivity extends AppCompatActivity {
     }
 
     public void onClick(View V){
-
 
         if (imageViewBuild==V) { // highlights chosen help type, and cancel if clicked twice (for each help type)
             buildCount++;
@@ -120,12 +125,16 @@ public class ChooseiconsActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) { // sets help type according to counters
                     profile = dataSnapshot.getValue(Profile.class);
-                    if (buildCount %2 == 1){ profile.setIsBuild(true);}
-                    if (callCount %2 == 1){ profile.setCall(true);}
-                    if (cleanCount %2 == 1){ profile.setClean(true);}
-                    if (companyCount %2 == 1){ profile.setCompany(true);}
-                    if (shopCount %2 == 1){ profile.setShop(true);}
-
+                    if (buildCount %2 == 1){ profile.setIsBuild(true);
+                    } else { profile.setIsBuild(false);}
+                    if (callCount %2 == 1){ profile.setCall(true);
+                    } else { profile.setCall(false);}
+                    if (cleanCount %2 == 1){ profile.setClean(true);
+                    } else { profile.setClean(false);}
+                    if (companyCount %2 == 1){ profile.setCompany(true);
+                    } else { profile.setCompany(false);}
+                    if (shopCount %2 == 1){ profile.setShop(true);
+                    } else { profile.setShop(false);}
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) { }

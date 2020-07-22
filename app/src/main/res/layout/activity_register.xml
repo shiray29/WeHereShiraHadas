@@ -53,21 +53,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.701" />
 
-    <TextView
-        android:id="@+id/textview_insertprofile"
-        android:layout_width="169dp"
-        android:layout_height="69dp"
-        android:clickable="true"
-        android:contextClickable="true"
-        android:text="הכנס תמונת פרופיל"
-        android:textSize="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.739"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.148" />
-
     <EditText
         android:id="@+id/edittext_fullname"
         android:layout_width="293dp"
@@ -154,14 +139,14 @@
         android:clickable="true"
         android:contextClickable="true"
         android:focusable="true"
-        android:text="הכנס צלום תעודת זהות"
+        android:text="הכנס תצלום תעודת זהות"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.77"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.935" />
+        app:layout_constraintVertical_bias="0.133" />
 
     <Button
         android:id="@+id/btn_confirm"
