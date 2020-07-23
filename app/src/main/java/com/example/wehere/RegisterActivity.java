@@ -42,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 private EditText edittextFullname, edittextCellnum, edittextIdnum, edittextAdress, edittextEmail, edittextEnterpassword;
 private CheckBox checkboxOldie, checkboxVolunteer;
-private Button btnConfirm;
+private Button btnConfirm, btnUpload;
 private Profile profile;
 // this line defines reference to Firebase Storage in order to store jpg files
 private StorageReference storageReference;
@@ -77,48 +77,50 @@ protected void onCreate(Bundle savedInstanceState) {
         checkboxOldie = findViewById(R.id.checkbox_oldie);
         checkboxVolunteer = findViewById(R.id.checkbox_volunteer);
         btnConfirm = findViewById(R.id.btn_confirm);
+        btnUpload = findViewById(R.id.btn_upload);
         progressBar = findViewById(R.id.progress_bar);
         textViewId.setOnClickListener(this);
         btnConfirm.setOnClickListener(this);
+        btnUpload.setOnClickListener(this);
+        latitude = 0;
+        longitude = 0;
         profile = new Profile();
-        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         }
 
 public void getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                                Location location = task.getResult();
+                                if (location != null) {
+                                        longitude = location.getLongitude();
+                                        latitude = location.getLatitude();
+                                }
+                        }
+                });
         }
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>()
-        {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                Location location = task.getResult();
-                if (location != null) {
-                longitude = location.getLongitude();
-                latitude = location.getLatitude();
-                 }
-                }
-        });
-        }
+}
 
 private void openFile(){ //this function opens the cellphone's gallery using intents
-        Intent intent= new Intent ();
+        Intent intent= new Intent (Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,1);
         }
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){ //this function re-defines the imageUri
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode==1)&&(resultCode==RESULT_OK)&&(data!=null)&&(data.getData()!=null)){
+        if ((requestCode==1)&&(resultCode==RESULT_OK)){
         imageUri= data.getData();
         }
         }
 private void upload(){
         if (imageUri!= null)
         {
-        String temp= System.currentTimeMillis()+"."+getFileExtention(imageUri); //defines a file name to the uploaded image
+        final String temp= System.currentTimeMillis()+"."+getFileExtention(imageUri); //defines a file name to the uploaded image
         final StorageReference fileReference= storageReference.child(temp); // inserts the new image to database storage
         fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
         @Override
@@ -135,7 +137,9 @@ private void upload(){
                                 }
                         },500);
                         progressBar.setProgress(0);
+                        String tempo = uri.toString();
                         profile.setUriId(uri.toString());
+                        tempo = profile.getUriId();
                         }
         });
         }
@@ -161,7 +165,9 @@ public void onClick(View v) {
 
         if (textViewId==v){
         openFile();
-        upload();
+        }
+        if (btnUpload == v){
+                upload();
         }
         if (btnConfirm == v){
         fullname = edittextFullname.getText().toString().trim();
@@ -184,12 +190,14 @@ public void onClick(View v) {
         profile.setEmail(email);
         profile.setPassword(password);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == (PackageManager.PERMISSION_GRANTED)){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != (PackageManager.PERMISSION_GRANTED)) {
+                ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+        }
+
         getLocation();
-        }
-        else {
-        ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-        }
+        profile.setLatitude(latitude);
+        profile.setLongitude(longitude);
+
 
         if ((checkboxOldie.isChecked() && checkboxVolunteer.isChecked()) || (!checkboxOldie.isChecked() && !checkboxVolunteer.isChecked())) // checks whether the user chose 2 or 0 options
         {
@@ -215,7 +223,7 @@ public void onClick(View v) {
         finish();
         }
         if (!task.isSuccessful())
-        { Toast.makeText(RegisterActivity.this,"ההרשמה נכשלה",Toast.LENGTH_SHORT).show();}
+        { Toast.makeText(RegisterActivity.this,task.getException().getMessage() ,Toast.LENGTH_SHORT).show();}
         }
         });
         }}}}

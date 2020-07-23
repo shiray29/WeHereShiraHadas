@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,16 +29,18 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class Search extends AppCompatActivity implements OnMapReadyCallback {
+public class Search extends FragmentActivity implements OnMapReadyCallback {
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
-    private ArrayList profileList;
-    private ArrayList markerList;
-    private GoogleMap googleMap;
+    private ArrayList<Profile> profileList;
+    private ArrayList<Marker> markerList;
+    //private GoogleMap googleMap;
     private double thisLon, thisLat;
-    private Profile thisUser;
+    private Profile thisUser, profile;
     private Button btnSearchedit;
+    GoogleMap map;
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +48,20 @@ public class Search extends AppCompatActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_search);
         databaseReference= FirebaseDatabase.getInstance().getReference("users");
         firebaseAuth = FirebaseAuth.getInstance();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         final ArrayList<Profile> profileList = new ArrayList<Profile>();
         final ArrayList<Marker> markerList = new ArrayList<Marker>();
         btnSearchedit = findViewById(R.id.btn_searchedit);
+        thisUser = new Profile();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) { // creates all profiles lists
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {// creates all profiles lists
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Profile profile = snapshot.getValue(Profile.class);
-                    profileList.add(profile);
+                    if (snapshot != null) {
+                        profileList.add(snapshot.getValue(Profile.class));
+                    }
+                    else {break; }
                 }
             }
             @Override
@@ -69,15 +74,14 @@ public class Search extends AppCompatActivity implements OnMapReadyCallback {
         double tempLat; // temporary variables for users loaction
         double tempLon;
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance()
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance()
                 .getCurrentUser().getUid()); // gets current user Lat & Lon
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Profile profile = dataSnapshot.getValue(Profile.class);
-                thisLat = profile.getLatitude();
-                thisLon = profile.getLongitude();
-                thisUser = profile;
+                thisUser = dataSnapshot.getValue(Profile.class);
+                thisLat = thisUser.getLatitude();
+                thisLon = thisUser.getLongitude();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
@@ -119,6 +123,14 @@ public class Search extends AppCompatActivity implements OnMapReadyCallback {
             count++;
         }
     }
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        LatLng point = new LatLng(thisLat, thisLon);
+        googleMap.addMarker(new MarkerOptions().position(point)); // shows the volunteer's location
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(point)); // focus their location
+    }
+
 
     public double findDistance(double lat1, double lon1, double lat2, double lon2) // calculates distance between 2 coordinates
     {
@@ -130,19 +142,10 @@ public class Search extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     public void showMarker(double lat, double lon, int imageID, String title) {
-        Marker m1 = googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).anchor(0.5f, 0.5f)
+        Marker m1 = map.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).anchor(0.5f, 0.5f)
                 .title(title).snippet("").icon(BitmapDescriptorFactory.fromResource(imageID))); // shows marker on map (specific icon and title)
         markerList.add(m1); // adss it to the marker list
     }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
-        LatLng point = new LatLng(thisLat, thisLon);
-        this.googleMap.addMarker(new MarkerOptions().position(point));
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(point));
-    }
-
 
     public void sendSmsOld(Profile currentUser, Profile wantedOldie, String helpType) // send SMS to old user and announces the volunteer
     {
@@ -174,9 +177,10 @@ public class Search extends AppCompatActivity implements OnMapReadyCallback {
             Intent intent_login = new Intent(this, com.example.wehere.EditProfile.class);
             startActivity(intent_login);
         }
+
         for (int i = 0; i < markerList.size(); i++) // runs on the marker list
         {
-            if (markerList.get(i) ==V) // when a specific marker is clicked...
+            if (markerList.get(i).equals(V)) // when a specific marker is clicked...
             {
                 Dialog dialog = new Dialog(this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

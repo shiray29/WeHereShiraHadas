@@ -32,11 +32,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         firebaseAuth= FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference("users"); // defines reference to Firebase Database, in order to authenticate users
         btnLoginConfirm = findViewById(R.id.btn_loginconfirm);
         editTextLoginEmail = findViewById(R.id.edittext_loginemail);
         editTextLoginPassword = findViewById(R.id.edittext_logingpassword);
         btnLoginConfirm.setOnClickListener(this);
-        databaseReference = FirebaseDatabase.getInstance().getReference("users"); // defines reference to Firebase Database, in order to authenticate users
     }
 
     @Override
@@ -55,10 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 editTextLoginPassword.setError("סיסמה חובה");
                 return;
             }
-            if (password.length()<6){
-                editTextLoginPassword.setError("הסיסמה חייבת להיות מעל 5 תווים");
-                return;
-            }
+
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) { //sends to Firebase Auth the email and password in order to log in

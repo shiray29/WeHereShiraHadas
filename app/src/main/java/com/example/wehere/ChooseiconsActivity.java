@@ -119,14 +119,14 @@ public class ChooseiconsActivity extends AppCompatActivity {
                 btnconfirmicon.setError("חייבים לבחור לפחות תחום סיוע אחד"); // notes if non help type was chosen
                 return;
             }
-            DatabaseReference  ref = FirebaseDatabase.getInstance().getReference().
+            DatabaseReference  ref = FirebaseDatabase.getInstance().getReference("users").
                     child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) { // sets help type according to counters
                     profile = dataSnapshot.getValue(Profile.class);
-                    if (buildCount %2 == 1){ profile.setIsBuild(true);
-                    } else { profile.setIsBuild(false);}
+                    if (buildCount %2 == 1) { profile.setIsBuild(true); }
+                    else { profile.setIsBuild(false); }
                     if (callCount %2 == 1){ profile.setCall(true);
                     } else { profile.setCall(false);}
                     if (cleanCount %2 == 1){ profile.setClean(true);
@@ -139,9 +139,12 @@ public class ChooseiconsActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) { }
             });
-            ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(profile); // updates the changes in Firebase
-            Intent intent_waitForRequest = new Intent(this, WaitforRequest.class);
+            ref.setValue(profile);
+            Intent intent_waitForRequest = new Intent(ChooseiconsActivity.this, WaitforRequest.class);
             startActivity(intent_waitForRequest);
+            finish();
         }
-    }
+
+    };
+
 }

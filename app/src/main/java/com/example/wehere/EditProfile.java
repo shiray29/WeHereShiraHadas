@@ -21,6 +21,7 @@ import com.google.firebase.storage.StorageReference;
 public class EditProfile extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
+    private FirebaseAuth firebaseAuth;
     private EditText fullName, cellNum, adress,password;
     private Button btnClose, btnSignOut;
     private Profile profile;
@@ -30,25 +31,19 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        storageReference = FirebaseStorage.getInstance().getReference("users"); // this line defines reference to Firebase Storage in order to store jpg files
+        databaseReference= FirebaseDatabase.getInstance().getReference("users"); // this line defines reference to Firebase Database in order to store users data
+        firebaseAuth = FirebaseAuth.getInstance();
         fullName = findViewById(R.id.edit_fullname);
         cellNum = findViewById(R.id.cell_num);
         adress= findViewById(R.id.adress);
         password=findViewById(R.id.password);
         btnClose=findViewById(R.id.btn_close);
         btnSignOut=findViewById(R.id.btn_signout);
-        storageReference = FirebaseStorage.getInstance().getReference("users"); // this line defines reference to Firebase Storage in order to store jpg files
-        databaseReference= FirebaseDatabase.getInstance().getReference("users"); // this line defines reference to Firebase Database in order to store users data
     }
 
 
     public void onClick(View v) {
-
-        if (btnSignOut == v){
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(EditProfile.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
         if (btnClose == v) {
             fullname = fullName.getText().toString().trim();
@@ -80,7 +75,7 @@ public class EditProfile extends AppCompatActivity {
 
             });
 
-            databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(profile);
+            databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().setValue(profile);
             startActivity(new Intent(getApplicationContext(), profile.isOld() == true ? com.example.wehere.WaitforRequest.class : Search.class)); // starts the suitable activity according to isOld
 
         }
