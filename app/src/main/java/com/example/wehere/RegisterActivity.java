@@ -35,6 +35,8 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.Serializable;
+
 import static com.google.firebase.storage.FirebaseStorage.getInstance;
 
 
@@ -219,8 +221,9 @@ public void onClick(View v) {
         {
         if (task.isSuccessful()){
         databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(profile);
-        startActivity(new Intent(getApplicationContext(), profile.isOld()==true?ChooseiconsActivity.class:Search.class));
-        finish();
+        Intent intent = new Intent(RegisterActivity.this, profile.isOld()==true?ChooseiconsActivity.class:Search.class);
+        intent.putExtra("Profile", (Serializable) profile);
+        startActivity(intent);
         }
         if (!task.isSuccessful())
         { Toast.makeText(RegisterActivity.this,task.getException().getMessage() ,Toast.LENGTH_SHORT).show();}

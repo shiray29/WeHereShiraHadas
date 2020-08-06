@@ -8,29 +8,35 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-public class ChooseiconsActivity extends AppCompatActivity {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class ChooseiconsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView imageViewBuild, imageViewCall, imageViewClean, imageViewCompany, imageViewShop;
     private TextView textViewPick, textViewBuild, textViewCall, textViewClean, textViewCompany, textViewShop;
     private Button btnconfirmicon;
     private Profile profile;
     private int buildCount, companyCount, cleanCount, callCount, shopCount;
+    private DatabaseReference  ref;
+    private ArrayList<Profile> list;
+    private FirebaseUser thisuser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chooseicons);
         imageViewBuild = findViewById(R.id.imageView_build);
+         ref = FirebaseDatabase.getInstance().getReference("users");
+         list = new ArrayList<Profile>();
+         thisuser = FirebaseAuth.getInstance().getCurrentUser();
         imageViewCall = findViewById(R.id.imageView_call);
         imageViewClean = findViewById(R.id.imageView_clean);
         imageViewCompany = findViewById(R.id.imageView_company);
@@ -42,7 +48,6 @@ public class ChooseiconsActivity extends AppCompatActivity {
         textViewShop = findViewById(R.id.textView_shop);
         textViewPick = findViewById(R.id.textView_pick);
         btnconfirmicon = findViewById(R.id.btn_confirmicon);
-        profile = new Profile();
         buildCount = 0; // defining count variables for each help type
         callCount = 0;
         cleanCount = 0;
@@ -58,6 +63,7 @@ public class ChooseiconsActivity extends AppCompatActivity {
         imageViewClean.setBackground(null);
         imageViewCompany.setBackground(null);
         imageViewShop.setBackground(null);
+        btnconfirmicon.setOnClickListener(this);
     }
 
     public void onClick(View V){
@@ -116,31 +122,34 @@ public class ChooseiconsActivity extends AppCompatActivity {
         if (btnconfirmicon==V){
             if ((buildCount%2==0) && (callCount%2==0) && (cleanCount%2==0) && (companyCount%2==0) && (shopCount%2==0))
             {
-                btnconfirmicon.setError("חייבים לבחור לפחות תחום סיוע אחד"); // notes if non help type was chosen
-                return;
-            }
-            DatabaseReference  ref = FirebaseDatabase.getInstance().getReference("users").
-                    child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            ref.addValueEventListener(new ValueEventListener() {
+               btnconfirmicon.setError("חייבים לבחור לפחות תחום סיוע אחד"); // notes if non help type was chosen
+                return;}
+
+            /* ref.child(thisuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) { // sets help type according to counters
-                    profile = dataSnapshot.getValue(Profile.class);
-                    if (buildCount %2 == 1) { profile.setIsBuild(true); }
-                    else { profile.setIsBuild(false); }
-                    if (callCount %2 == 1){ profile.setCall(true);
-                    } else { profile.setCall(false);}
-                    if (cleanCount %2 == 1){ profile.setClean(true);
-                    } else { profile.setClean(false);}
-                    if (companyCount %2 == 1){ profile.setCompany(true);
-                    } else { profile.setCompany(false);}
-                    if (shopCount %2 == 1){ profile.setShop(true);
-                    } else { profile.setShop(false);}
+                    profile = new Profile(dataSnapshot.getValue(Profile.class));
                 }
                 @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) { }
-            });
-            ref.setValue(profile);
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(ChooseiconsActivity.this, "CANCELLED", Toast.LENGTH_SHORT).show();
+                }
+            }); */
+            Intent intent = getIntent();
+            profile = (Profile) intent.getSerializableExtra("Profile");
+            if (buildCount %2 == 1) { profile.setIsBuild(true); }
+            else { profile.setIsBuild(false); }
+            if (callCount %2 == 1){ profile.setCall(true);
+            } else { profile.setCall(false);}
+            if (cleanCount %2 == 1){ profile.setClean(true);
+            } else { profile.setClean(false);}
+            if (companyCount %2 == 1){ profile.setCompany(true);
+            } else { profile.setCompany(false);}
+            if (shopCount %2 == 1){ profile.setShop(true);
+            } else { profile.setShop(false);}
+            ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(profile);
             Intent intent_waitForRequest = new Intent(ChooseiconsActivity.this, WaitforRequest.class);
+            intent_waitForRequest.putExtra("wait for request profile" , (Serializable) profile);
             startActivity(intent_waitForRequest);
             finish();
         }

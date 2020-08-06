@@ -21,11 +21,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
     private Button btnLoginConfirm ;
     private EditText editTextLoginEmail, editTextLoginPassword;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+    private ValueEventListener V;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         editTextLoginEmail = findViewById(R.id.edittext_loginemail);
         editTextLoginPassword = findViewById(R.id.edittext_logingpassword);
         btnLoginConfirm.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        //databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeEventListener(V);
     }
 
     @Override
@@ -60,26 +69,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) { //sends to Firebase Auth the email and password in order to log in
                     if(task.isSuccessful()){
-                        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() //this function connects the user's data using the user's Uid
+                        V = new ValueEventListener() //this function connects the user's data using the user's Uid
                         {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                startActivity(new Intent(getApplicationContext(),
-                                        dataSnapshot.getValue(Profile.class).isOld()==true?ChooseiconsActivity.class:Search.class)); //starts the suitable activity using datasnapshop
-                                finish();
+                                Profile prof = dataSnapshot.getValue(Profile.class);
+                                Intent intent = new Intent(LoginActivity.this, prof.isOld()==true?ChooseiconsActivity.class:Search.class);
+                                intent.putExtra("Profile", (Serializable) prof);
+                                startActivity(intent); //starts the suitable activity using datasnapshop
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) { //removes the option to cancel. once you log in, you can't return to LoginActivity
 
                             }
-                        });
-
-
-
+                        };
+                        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(V);
                     }
                     else {
-                        Toast.makeText(LoginActivity.this,"שגיאה שם משתמש וסיסמה אינם נכונים",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this,"שגיאה. שם משתמש וסיסמה אינם נכונים.",Toast.LENGTH_SHORT).show();
                     }
                 }
             });

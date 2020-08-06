@@ -8,12 +8,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.Serializable;
+
 public class WaitforRequest extends AppCompatActivity implements View.OnClickListener
 {
     private Button btnReqChange;
     private TextView textViewExplain;
     private TextView textViewWaitforReq;
     private Button btnEditWait;
+    private Profile intentProf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,7 @@ public class WaitforRequest extends AppCompatActivity implements View.OnClickLis
         textViewExplain = findViewById(R.id.textView_explain);
         btnEditWait.setOnClickListener(this);
         btnReqChange.setOnClickListener(this);
+        intentProf = (Profile) getIntent().getSerializableExtra("wait for request profile");
     }
 
     @Override
@@ -33,12 +37,14 @@ public class WaitforRequest extends AppCompatActivity implements View.OnClickLis
         if (btnEditWait == V)
         {
             Intent intent_editProfile = new Intent(this, EditProfile.class);
+            intent_editProfile.putExtra("profile to edit" , (Serializable) intentProf);
             startActivity(intent_editProfile);
         }
 
         if (btnReqChange == V)
         {
             Intent intent_chooseIcons = new Intent(this, ChooseiconsActivity.class);
+            intent_chooseIcons.putExtra("Profile", (Serializable) intentProf);
             startActivity(intent_chooseIcons);
         }
     }

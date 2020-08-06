@@ -1,6 +1,8 @@
 package com.example.wehere;
 
-public class Profile {
+import java.io.Serializable;
+
+public class Profile implements Serializable {
     private String name, adress, id, cellnum, password, email, uriId;
     private boolean isOld, isBuild, isClean, isCompany, isShop, isCall;
     private double longitude, latitude;
@@ -31,7 +33,7 @@ public class Profile {
 
 
     public Profile(String name, String adress, String id, String cellnum, String email, String password,
-                   String uriId, boolean isOld, boolean isBuild, boolean isClean, boolean isCompany, boolean isShop, boolean isCall, Double longitude, Double latitude) {
+                   String uriId, boolean isOld, boolean isBuild, boolean isClean, boolean isCompany, boolean isShop, boolean isCall, double longitude, double latitude) {
         this.name = name;
         this.adress = adress;
         this.id = id;
@@ -47,6 +49,31 @@ public class Profile {
         this.isCall = isCall;
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    public Profile(Profile profile){
+        this.name = profile.getName();
+        this.adress = profile.getAdress();
+        this.id = profile.getId();
+        this.cellnum = profile.getCellnum();
+        this.password = profile.getPassword();
+        this.email = profile.getEmail();
+        this.uriId = profile.getUriId();
+        this.isOld = profile.isOld;
+        this.isBuild = profile.getIsBuild();
+        this.isClean = profile.getClean();
+        this.isCompany = profile.getCompany();
+        this.isShop = profile.getShop();
+        this.isCall = profile.getCall();
+        this.longitude = profile.getLongitude();
+        this.latitude = profile.getLatitude();
+    }
+
+    public boolean profileEquals(Profile profile){
+        if (this.name == profile.getName()){
+            return true;
+        }
+        return false;
     }
 
 
@@ -122,7 +149,7 @@ public class Profile {
         this.email = email;
     }
 
-    public String getPassword(String password) {
+    public String getPassword() {
         return this.password;
     }
 

@@ -6,15 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -40,6 +36,8 @@ public class EditProfile extends AppCompatActivity {
         password=findViewById(R.id.password);
         btnClose=findViewById(R.id.btn_close);
         btnSignOut=findViewById(R.id.btn_signout);
+        profile = (Profile) getIntent().getSerializableExtra("profile to edit");
+
     }
 
 
@@ -50,34 +48,22 @@ public class EditProfile extends AppCompatActivity {
             cellnum = cellNum.getText().toString().trim();
             Adress = adress.getText().toString().trim();
             Password = password.getText().toString().trim();
-            databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    profile = dataSnapshot.getValue(Profile.class);
-                    if (!(fullname.isEmpty())) {
-                        profile.setName(fullname);
-                    }
-                    if (!(Adress.isEmpty())) {
-                        profile.setAdress(Adress);
-                    }
-                    if (!(cellnum.isEmpty())) {
-                        profile.setCellnum(cellnum);
-                    }
-                    if (!(Password.isEmpty())) {
-                        profile.getPassword(Password);
-                    }
-                }
+            if (!(fullname.isEmpty())) {
+                profile.setName(fullname);
+            }
+            if (!(Adress.isEmpty())) {
+                profile.setAdress(Adress);
+            }
+            if (!(cellnum.isEmpty())) {
+                profile.setCellnum(cellnum);
+            }
+            if (!(Password.isEmpty())) {
+                profile.setPassword(Password);
+            }
+        }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-
-            });
-
-            databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().setValue(profile);
-            startActivity(new Intent(getApplicationContext(), profile.isOld() == true ? com.example.wehere.WaitforRequest.class : Search.class)); // starts the suitable activity according to isOld
+        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(profile);
+        startActivity(new Intent(getApplicationContext(), profile.isOld() == true ? com.example.wehere.WaitforRequest.class : Search.class)); // starts the suitable activity according to isOld
 
         }
     }
-}

@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Search extends FragmentActivity implements OnMapReadyCallback {
@@ -37,8 +38,8 @@ public class Search extends FragmentActivity implements OnMapReadyCallback {
     private ArrayList<Marker> markerList;
     //private GoogleMap googleMap;
     private double thisLon, thisLat;
-    private Profile thisUser, profile;
-    private Button btnSearchedit;
+    private Profile thisUser;
+    private Button btnSearchedit, accept, decline;
     GoogleMap map;
     private SupportMapFragment mapFragment;
 
@@ -48,25 +49,24 @@ public class Search extends FragmentActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_search);
         databaseReference= FirebaseDatabase.getInstance().getReference("users");
         firebaseAuth = FirebaseAuth.getInstance();
+        thisUser = new Profile((Profile) getIntent().getSerializableExtra("Profile"));
+        thisLat = thisUser.getLatitude();
+        thisLon = thisUser.getLongitude();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         final ArrayList<Profile> profileList = new ArrayList<Profile>();
         final ArrayList<Marker> markerList = new ArrayList<Marker>();
         btnSearchedit = findViewById(R.id.btn_searchedit);
-        thisUser = new Profile();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {// creates all profiles lists
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    if (snapshot != null) {
-                        profileList.add(snapshot.getValue(Profile.class));
-                    }
-                    else {break; }
+                    profileList.add(snapshot.getValue(Profile.class));
+                    Toast.makeText(Search.this, "IM IN!", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
@@ -74,9 +74,9 @@ public class Search extends FragmentActivity implements OnMapReadyCallback {
         double tempLat; // temporary variables for users loaction
         double tempLon;
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance()
-                .getCurrentUser().getUid()); // gets current user Lat & Lon
-        ref.addValueEventListener(new ValueEventListener() {
+        // DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance()
+                //.getCurrentUser().getUid()); // gets current user Lat & Lon
+        /* ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 thisUser = dataSnapshot.getValue(Profile.class);
@@ -85,11 +85,11 @@ public class Search extends FragmentActivity implements OnMapReadyCallback {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
-        });
+        }); */
 
         while (profileList.size() > count) { // shows on map every near by old users (<30km)
-            if (profileList.get(count).isOld())
-            {
+            //if (profileList.get(count).isOld())
+            //{
                 tempLat = profileList.get(count).getLatitude(); // hadas shall add
                 tempLon = profileList.get(count).getLongitude();
                 if (findDistance(tempLat, tempLon, thisLat, thisLon) <=30)
@@ -121,7 +121,7 @@ public class Search extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
             count++;
-        }
+        //}
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -130,7 +130,6 @@ public class Search extends FragmentActivity implements OnMapReadyCallback {
         googleMap.addMarker(new MarkerOptions().position(point)); // shows the volunteer's location
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(point)); // focus their location
     }
-
 
     public double findDistance(double lat1, double lon1, double lat2, double lon2) // calculates distance between 2 coordinates
     {
@@ -169,43 +168,43 @@ public class Search extends FragmentActivity implements OnMapReadyCallback {
             }
         }
         return null; // if there's no user in this location
-
     }
+
+    private GoogleMap.OnMarkerClickListener myMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(final Marker mark) {
+                final Dialog dialog = new Dialog(Search.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.popupsearch); // shows the pop-up
+                accept = dialog.findViewById(R.id.btn_accept);
+                decline = dialog.findViewById(R.id.btn_decline);
+                accept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LatLng posi = mark.getPosition();
+                        String helpType = mark.getTitle();
+                        Profile wantedOld = oldUserFromLocation(posi);
+                        sendSmsOld(thisUser, wantedOld, helpType);
+                        dialog.cancel();
+                        dialog.show();
+                    }
+                });
+                decline.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                        dialog.show();
+                    }
+                });
+            return true;
+        }
+    };
 
     public void onClick(View V){
         if (V == btnSearchedit) { // links user to edit profile
             Intent intent_login = new Intent(this, com.example.wehere.EditProfile.class);
+            intent_login.putExtra("profile to edit" , (Serializable) thisUser);
             startActivity(intent_login);
-        }
-
-        for (int i = 0; i < markerList.size(); i++) // runs on the marker list
-        {
-            if (markerList.get(i).equals(V)) // when a specific marker is clicked...
-            {
-                Dialog dialog = new Dialog(this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.popupsearch); // shows the pop-up
-                Button accept = dialog.findViewById(R.id.btn_accept);
-                Button decline = dialog.findViewById(R.id.btn_decline);
-                accept.setOnClickListener((View.OnClickListener) this);
-                decline.setOnClickListener((View.OnClickListener) this);
-                if (V == accept)
-                {
-                    Marker mar = (Marker) markerList.get(i);
-                    LatLng posi = mar.getPosition();
-                    String helpType = mar.getTitle();
-                    Profile wantedOld = oldUserFromLocation(posi);
-                    sendSmsOld(thisUser, wantedOld, helpType);
-                    dialog.cancel();
-                    dialog.show();
-                }
-
-                if (V == decline)
-                {
-                    dialog.cancel();
-                    dialog.show();
-                }
-            }
         }
     }
 }
