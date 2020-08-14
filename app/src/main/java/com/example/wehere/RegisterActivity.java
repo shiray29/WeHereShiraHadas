@@ -65,10 +65,10 @@ protected void onCreate(Bundle savedInstanceState) {
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         storageReference = getInstance().getReference("users");
         firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser()!=null)
+        /* if (firebaseAuth.getCurrentUser()!=null)
         {
             firebaseAuth.signOut();
-        }
+        } */
         edittextFullname = findViewById(R.id.edittext_fullname);
         edittextCellnum = findViewById(R.id.edittext_cellnum);
         textViewId = findViewById(R.id.textview_insertidphoto);
@@ -88,11 +88,12 @@ protected void onCreate(Bundle savedInstanceState) {
         longitude = 0;
         profile = new Profile();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         }
 
 public void getLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                         @Override
                         public void onComplete(@NonNull Task<Location> task) {
@@ -169,7 +170,12 @@ public void onClick(View v) {
         openFile();
         }
         if (btnUpload == v){
-                upload();
+                firebaseAuth.signInAnonymously().addOnSuccessListener(this, new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                                upload();
+                        }
+                });
         }
         if (btnConfirm == v){
         fullname = edittextFullname.getText().toString().trim();
@@ -179,7 +185,7 @@ public void onClick(View v) {
         email = edittextEmail.getText().toString().trim();
         password = edittextEnterpassword.getText().toString().trim();
 
-        if ((fullname==null) || (cellnum==null) || (idnum == null) || (adress == null)
+        if ((fullname==null) || (cellnum==null) || (adress == null)
         || (email ==null) || (password == null))
         {
         Toast.makeText(this,"אנא מלא את כל הפרטים הנדרשים", Toast.LENGTH_SHORT).show();

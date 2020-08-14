@@ -9,9 +9,9 @@
 
     <TextView
         android:id="@+id/textView_sure"
-        android:layout_width="345dp"
-        android:layout_height="162dp"
-        android:text="האם אתה בטוח שאתה רוצה לעזור לקשיש שגר כאן בתחום הזה? "
+        android:layout_width="337dp"
+        android:layout_height="258dp"
+        android:text="האם אתה מעוניין לעזור לקשיש בתחום עליו לחצת, ולשלוח לו את פרטיך האישיים בSMS?"
         android:textColor="#070202"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,31 +19,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.131" />
-
-    <Button
-        android:id="@+id/btn_accept"
-        android:layout_width="292dp"
-        android:layout_height="156dp"
-        android:backgroundTint="#46E12B"
-        android:text="כן, שלחו לו SMS עם שמי, הכתובת שלי ומספר הטלפון שלי"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_decline"
-        android:layout_width="290dp"
-        android:layout_height="61dp"
-        android:backgroundTint="#C1D83434"
-        android:text="איני מעוניין"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_accept"
-        app:layout_constraintVertical_bias="0.163" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "538010292024",
-    "firebase_url": "https://wehere-52139.firebaseio.com",
-    "project_id": "wehere-52139",
-    "storage_bucket": "wehere-52139.appspot.com"
+    "project_number": "989905895690",
+    "firebase_url": "https://wehere2-1cc20.firebaseio.com",
+    "project_id": "wehere2-1cc20",
+    "storage_bucket": "wehere2-1cc20.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:538010292024:android:1db515ddcc6292c752fbcd",
+        "mobilesdk_app_id": "1:989905895690:android:0a1a507f6d6a540bdebaf3",
         "android_client_info": {
           "package_name": "com.example.wehere"
         }
       },
       "oauth_client": [
         {
-          "client_id": "538010292024-4kfc7r0k39s056k5mmsuji5fkaobk0ea.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.wehere",
-            "certificate_hash": "f2e14575bed377a823055a66948b4f80e43dfe52"
-          }
-        },
-        {
-          "client_id": "538010292024-24i4ilaeeaemcpddgdj960td3ck7jdmq.apps.googleusercontent.com",
+          "client_id": "989905895690-14c4j9v8jpq6qr8t91tpiicmo4uiqhq5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAeX_g54n7SDR6pyDMNqDClBHjlVoA-PUU"
+          "current_key": "AIzaSyBuvDYnJ5yUD9taNaSgxuo33tSbZIqWiFc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "538010292024-24i4ilaeeaemcpddgdj960td3ck7jdmq.apps.googleusercontent.com",
+              "client_id": "989905895690-14c4j9v8jpq6qr8t91tpiicmo4uiqhq5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
