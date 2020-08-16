@@ -13,30 +13,31 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-public class ExampleDialog extends AppCompatDialogFragment {
+public class OldDialog extends AppCompatDialogFragment {
     @NonNull
-
     private TextView textSure;
-    private ExampleDialogListener listener;
+    private OldDialogListener listener;
+    private boolean isSure;
 
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.popupsearch, null);
         builder.setView(view).setTitle("מצאת למי לעזור!").setNegativeButton("איני מעוניין", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                listener.isConfirmed(false);
-
-
+                isSure = false;
+                listener.isConfirmed(isSure);
             }
         }).setPositiveButton("אשמח לעזור!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                listener.isConfirmed(true);
+                isSure = true;
+                listener.isConfirmed(isSure);
             }
         });
+
         textSure = view.findViewById(R.id.textView_sure);
         return builder.create();
     }
@@ -45,13 +46,13 @@ public class ExampleDialog extends AppCompatDialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            listener = (ExampleDialogListener) context;
+            listener = (OldDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "must implement ExampleDialogListener");
         }
     }
 
-    public interface ExampleDialogListener{
+    public interface OldDialogListener{
         void isConfirmed(boolean result);
     }
 }

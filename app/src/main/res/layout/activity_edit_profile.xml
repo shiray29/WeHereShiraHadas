@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#92439783"
+    android:background="#FFFFFF"
     tools:context=".EditProfile">
 
     <EditText
@@ -27,7 +27,7 @@
         android:id="@+id/btn_close"
         android:layout_width="132dp"
         android:layout_height="80dp"
-        android:background="#EFEDED"
+        android:background="#B49C27B0"
         android:clickable="true"
         android:contextClickable="true"
         android:onClick="onClick"
@@ -39,23 +39,23 @@
         app:layout_constraintHorizontal_bias="0.057"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.915" />
+        app:layout_constraintVertical_bias="0.975" />
 
     <EditText
         android:id="@+id/edit_fullname"
         android:layout_width="313dp"
         android:layout_height="62dp"
         android:ems="10"
-        android:hint="שם מלא (גלוי)"
+        android:hint="שם מלא"
         android:inputType="textPersonName"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#050404"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.602"
+        app:layout_constraintHorizontal_bias="0.622"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.289" />
+        app:layout_constraintVertical_bias="0.284" />
 
     <EditText
         android:id="@+id/password"
@@ -80,7 +80,7 @@
         android:layout_height="62dp"
         android:ems="10"
         android:gravity="right|center_vertical"
-        android:hint="מספר טלפון"
+        android:hint="טלפון"
         android:inputType="phone"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#0E0E0E"
@@ -93,8 +93,8 @@
 
     <TextView
         android:id="@+id/textView_edit"
-        android:layout_width="343dp"
-        android:layout_height="55dp"
+        android:layout_width="334dp"
+        android:layout_height="59dp"
         android:background="#FFFFFF"
         android:shadowColor="#F6F6F6"
         android:text="ערוך את הפרופיל שלך"
@@ -105,7 +105,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.133" />
+        app:layout_constraintVertical_bias="0.023" />
 
     <Button
         android:id="@+id/btn_signout"
@@ -122,6 +122,18 @@
         app:layout_constraintHorizontal_bias="0.91"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.916" />
+        app:layout_constraintVertical_bias="0.975" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.039"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.507"
+        app:srcCompat="@drawable/to_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

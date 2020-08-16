@@ -7,11 +7,6 @@ public class Profile implements Serializable {
     private boolean isOld, isBuild, isClean, isCompany, isShop, isCall;
     private double longitude, latitude;
 
-
-    public String getUriId() {
-        return uriId;
-    }
-
     public Profile() {
         this.name = "";
         this.adress = "";
@@ -28,9 +23,7 @@ public class Profile implements Serializable {
         this.isCall = false;
         this.longitude = 0;
         this.latitude = 0;
-
     }
-
 
     public Profile(String name, String adress, String id, String cellnum, String email, String password,
                    String uriId, boolean isOld, boolean isBuild, boolean isClean, boolean isCompany, boolean isShop, boolean isCall, double longitude, double latitude) {
@@ -76,6 +69,9 @@ public class Profile implements Serializable {
         return false;
     }
 
+    public String getUriId() {
+        return uriId;
+    }
 
     public double getLongitude() {
         return longitude;

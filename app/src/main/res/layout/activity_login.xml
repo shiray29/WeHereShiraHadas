@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#52CD6B6B"
+    android:background="#52FFFFFF"
     tools:context=".LoginActivity">
 
     <TextView
@@ -17,32 +17,33 @@
         android:textSize="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.858"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.119" />
+        app:layout_constraintVertical_bias="0.026" />
 
     <EditText
         android:id="@+id/edittext_loginemail"
         style="@android:style/Widget.Material.Light.AutoCompleteTextView"
         android:layout_width="275dp"
         android:layout_height="73dp"
-        android:background="#FFFFFF"
+        android:background="#B59C27B0"
         android:ems="10"
         android:hint="דואר אלקטרוני"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.117"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.431" />
+        app:layout_constraintVertical_bias="0.237" />
 
     <EditText
         android:id="@+id/edittext_logingpassword"
         style="@android:style/Widget.Material.Light.AutoCompleteTextView"
         android:layout_width="275dp"
         android:layout_height="80dp"
-        android:background="#FBFBFB"
+        android:background="#5B9C27B0"
         android:ems="10"
         android:gravity="right|center_vertical"
         android:hint="סיסמא"
@@ -50,21 +51,35 @@
         android:shadowColor="#100808"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.882"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.629" />
+        app:layout_constraintVertical_bias="0.365" />
 
     <Button
         android:id="@+id/btn_loginconfirm"
-        android:layout_width="227dp"
-        android:layout_height="97dp"
+        android:layout_width="150dp"
+        android:layout_height="91dp"
         android:background="#040101"
         android:text="אישור"
         android:textColor="#FFFFFF"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.061"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.888" />
+        app:layout_constraintVertical_bias="0.657" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="228dp"
+        android:layout_height="416dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.978"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/inkedloginn_li" />
 </androidx.constraintlayout.widget.ConstraintLayout>

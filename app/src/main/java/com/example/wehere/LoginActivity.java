@@ -7,10 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -20,7 +18,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.io.Serializable;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
@@ -43,12 +40,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        //databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeEventListener(V);
-    }
-
-    @Override
     public void onClick(View v) {
         if (btnLoginConfirm == v)
         {
@@ -57,7 +48,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (TextUtils.isEmpty(email)) {
                 editTextLoginEmail.setError("אימייל חובה");
                 return;
-
             }
 
             if (TextUtils.isEmpty(password)) {
@@ -69,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) { //sends to Firebase Auth the email and password in order to log in
                     if(task.isSuccessful()){
-                        V = new ValueEventListener() //this function connects the user's data using the user's Uid
+                        V = new ValueEventListener() //this function imports the user's data using the user's Uid
                         {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -80,9 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
 
                             @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) { //removes the option to cancel. once you log in, you can't return to LoginActivity
-
-                            }
+                            public void onCancelled(@NonNull DatabaseError databaseError) { }
                         };
                         databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(V);
                     }
@@ -92,6 +80,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         }
-
     }
 }

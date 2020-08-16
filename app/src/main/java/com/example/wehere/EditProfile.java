@@ -27,8 +27,8 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-        storageReference = FirebaseStorage.getInstance().getReference("users"); // this line defines reference to Firebase Storage in order to store jpg files
-        databaseReference= FirebaseDatabase.getInstance().getReference("users"); // this line defines reference to Firebase Database in order to store users data
+        storageReference = FirebaseStorage.getInstance().getReference("users");
+        databaseReference= FirebaseDatabase.getInstance().getReference("users");
         firebaseAuth = FirebaseAuth.getInstance();
         fullName = findViewById(R.id.edit_fullname);
         cellNum = findViewById(R.id.cell_num);
@@ -37,13 +37,11 @@ public class EditProfile extends AppCompatActivity {
         btnClose=findViewById(R.id.btn_close);
         btnSignOut=findViewById(R.id.btn_signout);
         profile = (Profile) getIntent().getSerializableExtra("profile to edit");
-
     }
 
-
     public void onClick(View v) {
-
-        if (btnClose == v) {
+        if (btnClose == v)
+        { // updates data and goes back to previous activity
             fullname = fullName.getText().toString().trim();
             cellnum = cellNum.getText().toString().trim();
             Adress = adress.getText().toString().trim();
@@ -60,10 +58,12 @@ public class EditProfile extends AppCompatActivity {
             if (!(Password.isEmpty())) {
                 profile.setPassword(Password);
             }
+            databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(profile);
+            startActivity(new Intent(getApplicationContext(), profile.isOld() == true ? com.example.wehere.WaitforRequest.class : Search.class));
         }
-
-        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(profile);
-        startActivity(new Intent(getApplicationContext(), profile.isOld() == true ? com.example.wehere.WaitforRequest.class : Search.class)); // starts the suitable activity according to isOld
-
+        if (btnSignOut == v)
+        {
+            firebaseAuth.signOut();
+        }
         }
     }
